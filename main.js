@@ -63,7 +63,7 @@ function serverFunction(req, res) {
   res.setHeader('Content-Type', 'application/json');
 
   // Allow CORS from my website
-  res.setHeader('Access-Control-Allow-Origin', 'http://icelolly.ddns.net:466');
+  res.setHeader('Access-Control-Allow-Origin', 'https://sweeticelolly.ddns.net');
 
   /**
    * Set status and message of the respond and then respond
