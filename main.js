@@ -389,4 +389,4 @@ function serverFunction(req, res) {
 }
 
 // Create server
-http.createServer(serverFunction).listen(8080);
+http.createServer(serverFunction).listen(process.env.PORT);
