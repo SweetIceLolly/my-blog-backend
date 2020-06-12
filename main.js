@@ -210,8 +210,7 @@ function serverFunction(req, res) {
       if (err) {
         respond(500, 'Failed to access database.');
       } else {
-        contents = res.rows;
-        respond(200, JSON.stringify(contents));
+        respond(200, JSON.stringify(res.rows));
       }
     });
   }
