@@ -320,6 +320,44 @@ function serverFunction(req, res) {
       respond(403, 'Password incorrect.');
     }
   }
+
+  var processSubmitSurvey = function() {
+    // Parse the payload
+    try {
+      reqData = qs.parse(reqBody);
+    }
+    catch (e) {
+      respond(400, 'Cannot parse the requested body.');
+      return;
+    }
+
+    // articleid is not a number
+    var article_id = parseInt(reqData['articleid']);
+    if (Number.isNaN(article_id)) {
+      respond(400, 'Invalid articleid type. Expected a number.');
+      return;
+    }
+
+    // Survey answer is invalid
+    var surveyans = parseInt(reqData['surveyans']);
+    if (Number.isNaN(surveyans)) {
+      respond(400, 'Invalid surveyans type. Expected a number.');
+      return;
+    }
+    if (surveyans < 1 || surveyans > 7) {
+      respond(400, 'Invalid surveyans value.');
+      return;
+    }
+
+    // Insert the survey answer into the database
+    db.addSurveyAnswer(article_id, surveyans, (err, res) => {
+      if (err) {
+        respond(500, 'Failed to access database');
+      } else {
+        respond(200, 'Survey answer added');
+      }
+    });
+  }
   
   switch(reqApi.pathname) {
   case '/':
@@ -376,6 +414,20 @@ function serverFunction(req, res) {
     if (req.method === 'POST') {
       req.on('data', appendBody);
       req.on('end', processAddArticle);
+    } else {
+      respond(400, 'Invalid request method');
+    }
+    break;
+
+  case '/submitsurvey':
+    /**
+     * API: Add a survey answer entry
+     * Method: POST
+     * Args: articleid: Article ID; surveyans: Survey answer (1 - 7)
+     */
+    if (req.method === 'POST') {
+      req.on('data', appendBody);
+      req.on('end', processSubmitSurvey);
     } else {
       respond(400, 'Invalid request method');
     }

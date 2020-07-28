@@ -98,3 +98,16 @@ module.exports.addArticle = function(title, description, link, category, callbac
 
   pool.query(query, values, callback);
 }
+
+/**
+ * Add a new survey answer entry into the database
+ * @param {*} article_id Article ID
+ * @param {*} surveyans Survey answer (1 - 7)
+ * @param {function(err, res)} callback Callback function
+ */
+module.exports.addSurveyAnswer = function(article_id, surveyans, callback) {
+  const query = 'INSERT INTO survey (articleid, surveyans) VALUES ($1, $2)';
+  const values = [article_id, surveyans];
+
+  pool.query(query, values, callback);
+}
